@@ -1,5 +1,7 @@
 # spacex
 
+<img width="300" alt="Rascunho de um nave espacial" src="https://user-images.githubusercontent.com/54627/164325496-0e923800-1f03-432f-9620-f3654628598c.PNG">
+
 Implementação de [SpaceX API](https://github.com/r-spacex/SpaceX-API) em uma API e front-end.
 
 1. [Turborepo](https://turborepo.org/) para administração de monorepositório;
