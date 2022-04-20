@@ -1,0 +1,7 @@
+body {
+  margin: 0 64px;
+  font-family: coordinates, monospace;
+  font-size: 20px;
+  background: url(rocket.png) no-repeat bottom right fixed;
+  background-size: 50%;
+}

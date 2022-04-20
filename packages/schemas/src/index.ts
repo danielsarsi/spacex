@@ -3,6 +3,13 @@ import {
   LaunchParams,
   LaunchParamsSchema,
   LaunchSchema,
+  LaunchDatePrecision,
 } from "./launches";
 
-export { Launch, LaunchParams, LaunchParamsSchema, LaunchSchema };
+export {
+  Launch,
+  LaunchParams,
+  LaunchDatePrecision,
+  LaunchParamsSchema,
+  LaunchSchema,
+};

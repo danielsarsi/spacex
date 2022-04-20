@@ -1,0 +1,23 @@
+.launch {
+  /* margin: 1.4rem 0; */
+}
+
+.launch_category {
+  font-size: 0.7em;
+  font-weight: 500;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+}
+
+.launch_name {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.launch_date {
+  display: block;
+  font-size: 1em;
+  text-transform: uppercase;
+}

@@ -20,17 +20,23 @@ test("should return a list of launches", async (t) => {
     {
       id: fixture[0].id,
       name: fixture[0].name,
-      date: fixture[0].date_unix,
+      date: fixture[0].date_utc,
+      date_precision: fixture[0].date_precision,
+      success: fixture[0].success,
     },
     {
       id: fixture[1].id,
       name: fixture[1].name,
-      date: fixture[1].date_unix,
+      date: fixture[1].date_utc,
+      date_precision: fixture[1].date_precision,
+      success: fixture[1].success,
     },
     {
       id: fixture[2].id,
       name: fixture[2].name,
-      date: fixture[2].date_unix,
+      date: fixture[2].date_utc,
+      date_precision: fixture[2].date_precision,
+      success: fixture[2].success,
     },
   ]);
 
@@ -54,7 +60,9 @@ test("should return specific launch", async (t) => {
   t.same(JSON.parse(res.payload), {
     id: fixture[0].id,
     name: fixture[0].name,
-    date: fixture[0].date_unix,
+    date: fixture[0].date_utc,
+    date_precision: fixture[0].date_precision,
+    success: fixture[0].success,
   });
 
   t.end();
@@ -76,7 +84,9 @@ test("should return next launch", async (t) => {
   t.same(JSON.parse(res.payload), {
     id: fixture[0].id,
     name: fixture[0].name,
-    date: fixture[0].date_unix,
+    date: fixture[0].date_utc,
+    date_precision: fixture[0].date_precision,
+    success: fixture[0].success,
   });
 
   t.end();
@@ -98,7 +108,9 @@ test("should return latest launch", async (t) => {
   t.same(JSON.parse(res.payload), {
     id: fixture[0].id,
     name: fixture[0].name,
-    date: fixture[0].date_unix,
+    date: fixture[0].date_utc,
+    date_precision: fixture[0].date_precision,
+    success: fixture[0].success,
   });
 
   t.end();
@@ -109,8 +121,8 @@ test("should return upcoming launches", async (t) => {
 
   const mock = new MockAdapter(app.axios);
   mock
-    .onGet("https://api.spacexdata.com/v5/launches/upcoming")
-    .reply(200, [fixture[0], fixture[1], fixture[2]]);
+    .onPost("https://api.spacexdata.com/v5/launches/query")
+    .reply(200, { docs: [fixture[0], fixture[1], fixture[2]] });
 
   const res = await app.inject({
     url: "/launches/upcoming",
@@ -121,17 +133,23 @@ test("should return upcoming launches", async (t) => {
     {
       id: fixture[0].id,
       name: fixture[0].name,
-      date: fixture[0].date_unix,
+      date: fixture[0].date_utc,
+      date_precision: fixture[0].date_precision,
+      success: fixture[0].success,
     },
     {
       id: fixture[1].id,
       name: fixture[1].name,
-      date: fixture[1].date_unix,
+      date: fixture[1].date_utc,
+      date_precision: fixture[1].date_precision,
+      success: fixture[1].success,
     },
     {
       id: fixture[2].id,
       name: fixture[2].name,
-      date: fixture[2].date_unix,
+      date: fixture[2].date_utc,
+      date_precision: fixture[2].date_precision,
+      success: fixture[2].success,
     },
   ]);
 
@@ -143,8 +161,8 @@ test("should return past launches", async (t) => {
 
   const mock = new MockAdapter(app.axios);
   mock
-    .onGet("https://api.spacexdata.com/v5/launches/past")
-    .reply(200, [fixture[0], fixture[1], fixture[2]]);
+    .onPost("https://api.spacexdata.com/v5/launches/query")
+    .reply(200, { docs: [fixture[0], fixture[1], fixture[2]] });
 
   const res = await app.inject({
     url: "/launches/past",
@@ -155,17 +173,23 @@ test("should return past launches", async (t) => {
     {
       id: fixture[0].id,
       name: fixture[0].name,
-      date: fixture[0].date_unix,
+      date: fixture[0].date_utc,
+      date_precision: fixture[0].date_precision,
+      success: fixture[0].success,
     },
     {
       id: fixture[1].id,
       name: fixture[1].name,
-      date: fixture[1].date_unix,
+      date: fixture[1].date_utc,
+      date_precision: fixture[1].date_precision,
+      success: fixture[1].success,
     },
     {
       id: fixture[2].id,
       name: fixture[2].name,
-      date: fixture[2].date_unix,
+      date: fixture[2].date_utc,
+      date_precision: fixture[2].date_precision,
+      success: fixture[2].success,
     },
   ]);
 
@@ -233,7 +257,7 @@ test("should return same HTTP error", async (t) => {
     const app = await build(t);
 
     const mock = new MockAdapter(app.axios);
-    mock.onGet("https://api.spacexdata.com/v5/launches/upcoming").reply(404);
+    mock.onPost("https://api.spacexdata.com/v5/launches/query").reply(404);
 
     const res = await app.inject({
       url: "/launches/upcoming",
@@ -247,7 +271,7 @@ test("should return same HTTP error", async (t) => {
     const app = await build(t);
 
     const mock = new MockAdapter(app.axios);
-    mock.onGet("https://api.spacexdata.com/v5/launches/past").reply(404);
+    mock.onPost("https://api.spacexdata.com/v5/launches/query").reply(404);
 
     const res = await app.inject({
       url: "/launches/past",
@@ -319,9 +343,7 @@ test("should return 500 when network errors", async (t) => {
     const app = await build(t);
 
     const mock = new MockAdapter(app.axios);
-    mock
-      .onGet("https://api.spacexdata.com/v5/launches/upcoming")
-      .networkError();
+    mock.onPost("https://api.spacexdata.com/v5/launches/query").networkError();
 
     const res = await app.inject({
       url: "/launches/upcoming",
@@ -335,7 +357,7 @@ test("should return 500 when network errors", async (t) => {
     const app = await build(t);
 
     const mock = new MockAdapter(app.axios);
-    mock.onGet("https://api.spacexdata.com/v5/launches/past").networkError();
+    mock.onPost("https://api.spacexdata.com/v5/launches/query").networkError();
 
     const res = await app.inject({
       url: "/launches/past",

@@ -38,7 +38,9 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const response = launches.data.map((launch: any) => ({
         id: launch.id,
         name: launch.name,
-        date: launch.date_unix,
+        date: launch.date_utc,
+        date_precision: launch.date_precision,
+        success: launch.success,
       }));
 
       return response;
@@ -72,7 +74,9 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const response = {
         id: launch.data.id,
         name: launch.data.name,
-        date: launch.data.date_unix,
+        date: launch.data.date_utc,
+        date_precision: launch.data.date_precision,
+        success: launch.data.success,
       };
 
       return response;
@@ -96,7 +100,17 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     },
     async function (request, reply) {
       const [error, launches] = await fastify.to(
-        fastify.axios("https://api.spacexdata.com/v5/launches/upcoming")
+        fastify.axios.post("https://api.spacexdata.com/v5/launches/query", {
+          query: {
+            upcoming: true,
+          },
+          options: {
+            sort: {
+              flight_number: "desc",
+            },
+            pagination: false,
+          },
+        })
       );
 
       if (axios.isAxiosError(error)) {
@@ -105,10 +119,13 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
           error.message
         );
       }
-      const response = launches.data.map((launch: any) => ({
+
+      const response = launches.data.docs.map((launch: any) => ({
         id: launch.id,
         name: launch.name,
-        date: launch.date_unix,
+        date: launch.date_utc,
+        date_precision: launch.date_precision,
+        success: launch.success,
       }));
 
       return response;
@@ -132,7 +149,17 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
     },
     async function (request, reply) {
       const [error, launches] = await fastify.to(
-        fastify.axios("https://api.spacexdata.com/v5/launches/past")
+        fastify.axios.post("https://api.spacexdata.com/v5/launches/query", {
+          query: {
+            upcoming: false,
+          },
+          options: {
+            sort: {
+              flight_number: "desc",
+            },
+            pagination: false,
+          },
+        })
       );
 
       if (axios.isAxiosError(error)) {
@@ -142,10 +169,12 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
         );
       }
 
-      const response = launches.data.map((launch: any) => ({
+      const response = launches.data.docs.map((launch: any) => ({
         id: launch.id,
         name: launch.name,
-        date: launch.date_unix,
+        date: launch.date_utc,
+        date_precision: launch.date_precision,
+        success: launch.success,
       }));
 
       return response;
@@ -179,7 +208,9 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const response = {
         id: launch.data.id,
         name: launch.data.name,
-        date: launch.data.date_unix,
+        date: launch.data.date_utc,
+        date_precision: launch.data.date_precision,
+        success: launch.data.success,
       };
 
       return response;
@@ -216,7 +247,9 @@ const launches: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       const response = {
         id: launch.data.id,
         name: launch.data.name,
-        date: launch.data.date_unix,
+        date: launch.data.date_utc,
+        date_precision: launch.data.date_precision,
+        success: launch.data.success,
       };
 
       return response;
