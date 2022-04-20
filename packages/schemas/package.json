@@ -1,0 +1,14 @@
+{
+  "name": "schemas",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.23.4",
+    "typescript": "^4.5.4"
+  }
+}
